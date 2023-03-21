@@ -16,7 +16,7 @@
         android:gravity="center"
         android:textStyle="bold"
         android:background="#03A9F4"
-        android:text="记事本" />
+        android:text="@string/notebook" />
 
 
     <ListView

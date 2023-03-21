@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TextApp</string>
+    <string name="notebook">记事本</string>
 </resources>
