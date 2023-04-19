@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private SQLiteHelper dbHelper;
     private Button check_user;
     private EditText username, userpassword;
-    private ImageView login_head;
+//    private ImageView login_head;
     private TextView register_user;
 
     //加载User实例
@@ -42,12 +42,11 @@ public class LoginActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.login_username);
         userpassword = (EditText) findViewById(R.id.login_password);
 
-        login_head = (ImageView) findViewById(R.id.login_head);
+//        login_head = (ImageView) findViewById(R.id.login_head);
 
         register_user = (TextView) findViewById(R.id.register_user);
 
-        login_head.setImageBitmap(BitmapFactory.decodeResource(getResources(),
-                R.drawable.head));
+//        login_head.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.head));
 
         check_user.setOnClickListener(new View.OnClickListener() {
             @Override
