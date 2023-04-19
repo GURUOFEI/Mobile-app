@@ -9,6 +9,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".notepad.APP"
         android:theme="@style/AppTheme">
         <activity android:name=".notepad.EditMineActivity" />
         <activity android:name=".notepad.RecordActivity"/>
@@ -17,7 +18,8 @@
         </activity>
         <activity android:name=".notepad.NewsActivity"/>
         <activity android:name=".notepad.RegisterActivity" />
-        <activity android:name=".notepad.LoginActivity">
+        <activity android:name=".notepad.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
