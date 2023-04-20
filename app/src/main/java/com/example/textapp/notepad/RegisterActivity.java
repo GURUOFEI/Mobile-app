@@ -33,6 +33,7 @@ import com.google.firebase.database.DataSnapshot;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -90,27 +91,27 @@ public class RegisterActivity extends AppCompatActivity {
                 String repassword_str = repassword.getText().toString();
 
                 if (TextUtils.isEmpty(username_str)) {
-                    ToastUtil.show("请输入用户名");
+                    ToastUtil.show(R.string.login_enter_username_tip);
                     return;
                 }
 
                 if (TextUtils.isEmpty(userpassword_str)) {
-                    ToastUtil.show("请输入用户密码");
+                    ToastUtil.show(R.string.login_enter_password_tip);
                     return;
                 }
 
                 if (TextUtils.isEmpty(repassword_str)) {
-                    ToastUtil.show("请再次输入密码");
+                    ToastUtil.show(R.string.login_enter_password_tip2);
                     return;
                 }
 
                 if (!userpassword_str.equals(repassword_str)) {
-                    ToastUtil.show("两次密码不一致，请重新输入");
+                    ToastUtil.show(R.string.login_password_diff_tip);
                     return;
                 }
 
                 if (!checkBox.isChecked()) {
-                    ToastUtil.show("请勾选同意使用条款");
+                    ToastUtil.show(R.string.register_checkbox_tip);
                     return;
                 }
 
@@ -122,21 +123,21 @@ public class RegisterActivity extends AppCompatActivity {
 //                        db.insert("User", null, values);
 
                 //用户信息，注意密码需要MD5加密
-                User user = new User(username_str, MD5Utils.getMD5String(userpassword_str));
+                User user = new User(UUID.randomUUID().toString(), username_str, MD5Utils.getMD5String(userpassword_str));
                 FirebaseUtil.getInstance()
-                        .getUserRef()
-                        .child(user.getName())
+                        .getUserRef(user.getName())
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 //判断该用户是否已经注册
                                 if (task.getResult().getValue() == null) {
+                                    //没有注册，把数据输入到服务器
                                     FirebaseUtil.getInstance()
-                                            .getUserRef()
-                                            .child(user.getName())
+                                            .getUserRef(user.getName())
                                             .setValue(user)
                                             .addOnSuccessListener(unused -> {
                                                 ToastUtil.show("注册成功");
+                                                //返回登录页面
                                                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                                                 finish();
                                             }).addOnFailureListener(e -> ToastUtil.show("注册失败请重试"));

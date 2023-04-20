@@ -10,13 +10,11 @@ public class RealtimeDatabaseUtil {
     private FirebaseDatabase database = null;
     private DatabaseReference userRef;
 
-    public DatabaseReference getUserRef() {
-        return userRef;
-    }
+    public final static String USER_LIST = "user_list";
 
     private RealtimeDatabaseUtil() {
         database = FirebaseDatabase.getInstance();
-        userRef = database.getReference().child("user_list");
+        userRef = database.getReference().child(USER_LIST);
     }
 
     public static RealtimeDatabaseUtil getInstance() {
@@ -28,6 +26,14 @@ public class RealtimeDatabaseUtil {
             }
         }
         return mInstance;
+    }
+
+    public DatabaseReference getUserRef(String key) {
+        return userRef.child(key);
+    }
+
+    public DatabaseReference getReference(){
+        return database.getReference();
     }
 
 }

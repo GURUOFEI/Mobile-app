@@ -17,8 +17,12 @@ import com.example.textapp.notepad.utils.FirebaseUtil;
 import com.example.textapp.notepad.utils.MD5Utils;
 import com.example.textapp.notepad.utils.SharedPreUtil;
 import com.example.textapp.notepad.utils.ToastUtil;
+import com.example.textapp.notepad.utils.firebse.RealtimeDatabaseUtil;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class EditMineActivity extends AppCompatActivity {
@@ -34,6 +38,8 @@ public class EditMineActivity extends AppCompatActivity {
 
     //User user = User.getInstance();
     String username;
+    //用户的uuid
+    private String uuid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,7 @@ public class EditMineActivity extends AppCompatActivity {
         dbHelper = new SQLiteHelper(this);
 
         username = (String) SharedPreUtil.getParam(EditMineActivity.this, SharedPreUtil.LOGIN_DATA, "");
+        uuid = (String) SharedPreUtil.getParam(EditMineActivity.this, SharedPreUtil.LOGIN_UUID, "");
         update_username.setText(username);
         iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new View.OnClickListener() {
@@ -80,17 +87,17 @@ public class EditMineActivity extends AppCompatActivity {
 
 
         if (TextUtils.isEmpty(update_password_str)) {
-            ToastUtil.show("请输入新密码");
+            ToastUtil.show(R.string.modify_password_enter_new_password);
             return;
         }
 
         if (TextUtils.isEmpty(update_repassword_str)) {
-            ToastUtil.show("请确认密码");
+            ToastUtil.show(R.string.modify_password_enter_confirm_password);
             return;
         }
 
         if (!update_password_str.equals(update_repassword_str)) {
-            ToastUtil.show("两次密码不一致，请重新输入");
+            ToastUtil.show(R.string.login_password_diff_tip);
             return;
         }
 
@@ -102,15 +109,22 @@ public class EditMineActivity extends AppCompatActivity {
 //        } else {
 //            Toast.makeText(EditMineActivity.this, "两次密码不一致，请重新输入", Toast.LENGTH_SHORT).show();
 //        }
-        User user = new User(update_username_str, MD5Utils.getMD5String(update_password_str));
-        FirebaseUtil.getInstance()
-                .getUserRef()
-                .child(user.getName())
-                .setValue(user)
-                .addOnSuccessListener(unused -> {
-                    ToastUtil.show("保存成功");
+
+        //组装要更新的参数
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("password", MD5Utils.getMD5String(update_password_str));
+        userMap.put("username", username);
+        userMap.put("uuid", uuid);
+        //组装更新的节点
+        Map<String, Object> map = new HashMap<>();
+        map.put("/" + RealtimeDatabaseUtil.USER_LIST + "/" + update_username_str, userMap);
+        //更新实时数据库
+        RealtimeDatabaseUtil.getInstance()
+                .getReference()
+                .updateChildren(map, (error, ref) -> {
+                    ToastUtil.show(R.string.modify_success);
                     finish();
-                }).addOnFailureListener(e -> ToastUtil.show("修改失败请重试"));
+                });
 
     }
 

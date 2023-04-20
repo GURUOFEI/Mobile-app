@@ -1,5 +1,7 @@
 package com.example.textapp.notepad.utils;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -10,9 +12,6 @@ public class FirebaseUtil {
     private FirebaseDatabase database = null;
     private DatabaseReference userRef;
 
-    public DatabaseReference getUserRef() {
-        return userRef;
-    }
 
     private FirebaseUtil() {
         database = FirebaseDatabase.getInstance();
@@ -28,6 +27,10 @@ public class FirebaseUtil {
             }
         }
         return mInstance;
+    }
+
+    public DatabaseReference getUserRef(String key) {
+        return userRef.child(key);
     }
 
 }

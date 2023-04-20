@@ -66,38 +66,42 @@ public class LoginActivity extends AppCompatActivity {
                 String userpassword_str = userpassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(username_str)) {
-                    ToastUtil.show("请输入用户名");
+                    ToastUtil.show(R.string.login_enter_username_tip);
                     return;
                 }
 
                 if (TextUtils.isEmpty(userpassword_str)) {
-                    ToastUtil.show("请输入用户密码");
+                    ToastUtil.show(R.string.login_enter_password_tip);
                     return;
                 }
-
+                //提交到Firebase的Realtime Database
                 FirebaseUtil.getInstance()
-                        .getUserRef()
-                        .child(username_str)
+                        .getUserRef(username_str)
                         .get()
-                        .addOnCompleteListener(task -> {
+                        .addOnCompleteListener(task -> {//回调监听
                             if (task.isSuccessful()) {
+                                //获取数据并转换成实体
                                 User user = task.getResult().getValue(User.class);
                                 //判断该用户是否已经注册
                                 if (user == null) {
-                                    ToastUtil.show("该用户不存在!");
+                                    ToastUtil.show(R.string.login_no_user);
                                 } else {
+                                    //比较密码是否一致
                                     if (MD5Utils.getMD5String(userpassword_str).equals(user.getPassword())) {
                                         SharedPreUtil.setParam(LoginActivity.this, SharedPreUtil.IS_LOGIN, true);
                                         SharedPreUtil.setParam(LoginActivity.this, SharedPreUtil.LOGIN_DATA, username_str);
+                                        //把UUID保存到配置文件
+                                        SharedPreUtil.setParam(LoginActivity.this, SharedPreUtil.LOGIN_UUID, user.getUuid());
                                         SharedPreUtil.setParam(LoginActivity.this, SharedPreUtil.LOGIN_PWD_DATA, userpassword_str);
                                         //user.setUsername(username_str);
                                         //user.setPassword(userpassword_str);
+                                        //跳转到主页面
                                         Intent intent = new Intent(LoginActivity.this, NotepadActivity.class);
                                         TimeCount.getInstance().setTime(System.currentTimeMillis());
                                         startActivity(intent);
                                         finish();
                                     } else {
-                                        Toast.makeText(LoginActivity.this, "密码错误，请重新登录", Toast.LENGTH_SHORT).show();
+                                        ToastUtil.show(R.string.login_error_password);
                                     }
                                 }
                             }

@@ -14,6 +14,8 @@ public class SharedPreUtil {
     private static final String FILE_NAME = "user_login";
     //存储用户登录信息（用户名）
     public static final String LOGIN_DATA = "loginData";
+//    //存储用户登录的UUID
+    public static final String LOGIN_UUID = "loginUUID";
     //存储用户登录信息（用户名）
     public static final String LOGIN_PWD_DATA = "loginPwdData";
     //存储用户登录状态（是否登录）
