@@ -127,20 +127,20 @@ public class NotepadActivity extends AppCompatActivity {
 
         //这里改为查询Firestore Database
 //        list=mSQLiteHelper.query((String) SharedPreUtil.getParam(NotepadActivity.this, SharedPreUtil.LOGIN_DATA,""));
-        FirestoreDatabaseUtil.getInstance()
-                .getUserNotebook(uuid)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {//请求成功
-                        //把数据拿转换成NotepadBean并放到list
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                            NotepadBean notepadBean = new NotepadBean(queryDocumentSnapshot.getId(), queryDocumentSnapshot.getData());
-                            list.add(notepadBean);
-                        }
-                        //刷新列表
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+//        FirestoreDatabaseUtil.getInstance()
+//                .getUserNotebook(uuid)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {//请求成功
+//                        //把数据拿转换成NotepadBean并放到list
+//                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+//                            NotepadBean notepadBean = new NotepadBean(queryDocumentSnapshot.getId(), queryDocumentSnapshot.getData());
+//                            list.add(notepadBean);
+//                        }
+//                        //刷新列表
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                });
 
         //添加一个监听
         FirestoreDatabaseUtil.getInstance()

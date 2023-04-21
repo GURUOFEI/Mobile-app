@@ -16,6 +16,8 @@
     <string name="edit_content_save_tip">保存的记录内容不能为空</string>
     <string name="edit_content_modify_tip">修改的记录内容不能为空</string>
     <string name="save_success">保存成功</string>
+    <string name="please_choose_type">请选择分类</string>
+    <string name="type_show">分类: %s</string>
 
     <string-array name="noteboot_type">
         <item>person</item>

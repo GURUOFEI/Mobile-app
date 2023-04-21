@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.textapp.R;
@@ -28,10 +29,21 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
     ImageView delete;
     ImageView note_save;
     TextView noteName;
-    ;
+    /**
+     * 分类
+     */
+    TextView tv_type;
+
     private SQLiteHelper mSQLiteHelper;
     //    private String id;
     private NotepadBean notepadBean;
+
+    //分类
+    private String[] typeArray;
+    /**
+     * 选择的分类
+     */
+    private int chooseType = -1;
 
     /**
      * 当前用户的uuid
@@ -50,6 +62,8 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
         delete = (ImageView) findViewById(R.id.delete);//清空的按钮
         note_save = (ImageView) findViewById(R.id.note_save);//保存的按钮
         noteName = (TextView) findViewById(R.id.note_name);//标题的名称
+        tv_type = findViewById(R.id.tv_type);
+        tv_type.setOnClickListener(this);
         note_back.setOnClickListener(this);
         delete.setOnClickListener(this);
         note_save.setOnClickListener(this);
@@ -61,6 +75,9 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
     public void initData() {
         uuid = (String) SharedPreUtil.getParam(RecordActivity.this, SharedPreUtil.LOGIN_UUID, "");
 
+        //读取分类数据
+        typeArray = getResources().getStringArray(R.array.noteboot_type);
+
         mSQLiteHelper = new SQLiteHelper(this);
         noteName.setText("添加记录");
         Intent intent = getIntent();
@@ -71,14 +88,34 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
                 content.setText(notepadBean.getNotepadContent());
                 note_time.setText(DateUtil.formate(notepadBean.getNotepadTime()));
                 note_time.setVisibility(View.VISIBLE);
+                if(notepadBean.getType()!=-1) {
+                    tv_type.setText(String.format(getString(R.string.type_show),typeArray[notepadBean.getType()]));
+                }
             }
         }
 
     }
 
+    private void chooseType() {
+        //添加一个弹窗构造
+        AlertDialog.Builder builder = new AlertDialog.Builder(RecordActivity.this).setCancelable(true);
+
+        builder.setItems(typeArray, (dialog, which) -> {
+            this.chooseType = which;
+            tv_type.setText(typeArray[which]);
+        }).create();
+        //创建弹窗
+        AlertDialog dialog = builder.create();
+        //显示弹窗
+        dialog.show();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_type:
+                chooseType();
+                break;
             case R.id.note_back:
                 finish();
                 break;
@@ -103,6 +140,7 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
                         Map<String, Object> updateContent = new HashMap<>();
                         updateContent.put("notepadContent", noteContent);//内容
                         updateContent.put("notepadTime", System.currentTimeMillis());//更新时间
+                        updateContent.put("type", chooseType);//分类
 
                         // Add a new document with a generated ID
                         FirestoreDatabaseUtil.getInstance()
@@ -134,6 +172,7 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
                         notepadBean.setNotepadContent(noteContent);
                         notepadBean.setNotepadTime(System.currentTimeMillis());
                         notepadBean.setNotepadPhone((String) SharedPreUtil.getParam(RecordActivity.this, SharedPreUtil.LOGIN_DATA, ""));
+                        notepadBean.setType(chooseType);
 
                         // Add a new document with a generated ID
                         FirestoreDatabaseUtil.getInstance()
