@@ -13,6 +13,11 @@ public class APP extends Application {
      */
     public static Context context;
 
+    /**
+     * 是否Debug，方便测试
+     */
+    public final static boolean isDebut = true;
+
 
     @Override
     public void onCreate() {

@@ -13,6 +13,10 @@
     <string name="modify_password_enter_new_password">请输入新密码</string>
     <string name="modify_password_enter_confirm_password">请确认密码</string>
 
+    <string name="edit_content_save_tip">保存的记录内容不能为空</string>
+    <string name="edit_content_modify_tip">修改的记录内容不能为空</string>
+    <string name="save_success">保存成功</string>
+
     <string-array name="noteboot_type">
         <item>person</item>
         <item>life</item>

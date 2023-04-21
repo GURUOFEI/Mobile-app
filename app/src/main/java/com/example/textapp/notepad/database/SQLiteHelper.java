@@ -68,9 +68,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 NotepadBean noteInfo=new NotepadBean();
                 String id=String.valueOf(cursor.getInt(cursor.getColumnIndex(DBUtils.NOTEPAD_ID)));
                 String content=cursor.getString(cursor.getColumnIndex(DBUtils.NOTEPAD_CONTENT));
-                String time=cursor.getString(cursor.getColumnIndex(DBUtils.NOTEPAD_TIME));
+                long time=cursor.getLong(cursor.getColumnIndex(DBUtils.NOTEPAD_TIME));
                 String phone=cursor.getString(cursor.getColumnIndex(DBUtils.NOTEPAD_PHONE));
-                noteInfo.setId(id);
+//                noteInfo.setId(id);
                 noteInfo.setNotepadContent(content);
                 noteInfo.setNotepadTime(time);
                 noteInfo.setNotepadPhone(phone);

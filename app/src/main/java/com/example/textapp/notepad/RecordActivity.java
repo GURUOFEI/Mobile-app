@@ -2,28 +2,21 @@ package com.example.textapp.notepad;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.textapp.R;
 import com.example.textapp.notepad.bean.NotepadBean;
 import com.example.textapp.notepad.database.SQLiteHelper;
-import com.example.textapp.notepad.utils.DBUtils;
+import com.example.textapp.notepad.utils.DateUtil;
 import com.example.textapp.notepad.utils.LogUtil;
 import com.example.textapp.notepad.utils.SharedPreUtil;
 import com.example.textapp.notepad.utils.ToastUtil;
 import com.example.textapp.notepad.utils.firebse.FirestoreDatabaseUtil;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +30,15 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
     TextView noteName;
     ;
     private SQLiteHelper mSQLiteHelper;
-    private String id;
+    //    private String id;
+    private NotepadBean notepadBean;
+
+    /**
+     * 当前用户的uuid
+     */
+    private String uuid;
+
+    public final static String KEY_NOTEPAD = "key_notepad";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +59,21 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void initData() {
+        uuid = (String) SharedPreUtil.getParam(RecordActivity.this, SharedPreUtil.LOGIN_UUID, "");
+
         mSQLiteHelper = new SQLiteHelper(this);
         noteName.setText("添加记录");
         Intent intent = getIntent();
         if (intent != null) {
-            id = intent.getStringExtra("id");
-            if (id != null) {
+            notepadBean = intent.getParcelableExtra(KEY_NOTEPAD);
+            if (notepadBean != null) {
                 noteName.setText("修改记录");
-                content.setText(intent.getStringExtra("content"));
-                note_time.setText(intent.getStringExtra("time"));
+                content.setText(notepadBean.getNotepadContent());
+                note_time.setText(DateUtil.formate(notepadBean.getNotepadTime()));
                 note_time.setVisibility(View.VISIBLE);
             }
         }
+
     }
 
     @Override
@@ -83,18 +87,37 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.note_save:
                 String noteContent = content.getText().toString().trim();
-                if (id != null) {
+                if (notepadBean != null) {
                     //修改记录的功能
                     if (noteContent.length() > 0) {
-                        if (mSQLiteHelper.updateData(id, noteContent, DBUtils.getTime())) {
-                            showToast("修改成功");
-                            setResult(2);
-                            finish();
-                        } else {
-                            showToast("修改失败");
-                        }
+                        LogUtil.d("修改");
+//                        if (mSQLiteHelper.updateData(id, noteContent, DBUtils.getTime())) {
+//                            showToast("修改成功");
+//                            setResult(2);
+//                            finish();
+//                        } else {
+//                            showToast("修改失败");
+//                        }
+
+                        //更新的内容
+                        Map<String, Object> updateContent = new HashMap<>();
+                        updateContent.put("notepadContent", noteContent);//内容
+                        updateContent.put("notepadTime", System.currentTimeMillis());//更新时间
+
+                        // Add a new document with a generated ID
+                        FirestoreDatabaseUtil.getInstance()
+                                .getUserNotebook(uuid)
+                                .document(notepadBean.getId())
+                                .update(updateContent)
+                                .addOnSuccessListener(unused -> {
+                                    ToastUtil.show(R.string.modify_success);
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+
+                                });
                     } else {
-                        showToast("修改的记录内容不能为空");
+                        ToastUtil.show(R.string.edit_content_modify_tip);
                     }
                 } else {
                     //添加记录的功能
@@ -108,41 +131,30 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
 //                            showToast("保存失败");
 //                        }
                         NotepadBean notepadBean = new NotepadBean();
-                        notepadBean.setNotepadContent("content");
-                        notepadBean.setNotepadTime(System.currentTimeMillis() + "");
-                        notepadBean.setNotepadPhone("13800138000");
+                        notepadBean.setNotepadContent(noteContent);
+                        notepadBean.setNotepadTime(System.currentTimeMillis());
+                        notepadBean.setNotepadPhone((String) SharedPreUtil.getParam(RecordActivity.this, SharedPreUtil.LOGIN_DATA, ""));
 
                         // Add a new document with a generated ID
                         FirestoreDatabaseUtil.getInstance()
-                                .getNotebook()
+                                .getUserNotebook(uuid)
                                 .add(notepadBean)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        LogUtil.d("保存成功");
-                                        ToastUtil.show("保存成功");
-                                    }
+                                .addOnSuccessListener(unused -> {
+                                    ToastUtil.show(R.string.save_success);
+                                    finish();
                                 })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        LogUtil.d("保存失败");
-                                        ToastUtil.show("保存失败，请重试");
-                                    }
+                                .addOnFailureListener(e -> {
+
                                 });
 
                     } else {
-                        showToast("保存的记录内容不能为空");
+                        ToastUtil.show(R.string.edit_content_save_tip);
                     }
                 }
                 break;
             default:
                 break;
         }
-    }
-
-    public void showToast(String message) {
-        Toast.makeText(RecordActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
 }
