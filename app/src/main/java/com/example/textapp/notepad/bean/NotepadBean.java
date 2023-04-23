@@ -3,6 +3,8 @@ package com.example.textapp.notepad.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.textapp.notepad.utils.LogUtil;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,6 +18,20 @@ public class NotepadBean implements Parcelable {
      * 数据路径，多个，用","分隔
      */
     private String photos;
+
+    /**
+     * 定位名称
+     */
+    private String locationPlaceName;
+    /**
+     * 纬度
+     */
+    private double latitude;
+    /**
+     * 经度
+     */
+    private double longitude;
+
 
     /**
      * 分类
@@ -45,11 +61,21 @@ public class NotepadBean implements Parcelable {
         this.notepadContent = map.get("notepadContent").toString();
         this.notepadPhone = map.get("notepadPhone").toString();
         this.notepadTime = Long.parseLong(map.get("notepadTime").toString());
-        if(map.containsKey("photos")) {
+        //图片
+        if (map.containsKey("photos")) {
             this.photos = Objects.requireNonNull(map.get("photos")).toString();
         }
+        //分类
         if (map.containsKey("type")) {
             this.type = Integer.parseInt(map.get("type").toString());
+        }
+        //定位
+        if (map.containsKey("locationPlaceName")) {
+            if(map.get("locationPlaceName")!=null) {
+                this.locationPlaceName = Objects.requireNonNull(map.get("locationPlaceName")).toString();
+                this.latitude = (double) map.get("latitude");
+                this.longitude = (double) map.get("longitude");
+            }
         }
     }
 
@@ -94,6 +120,31 @@ public class NotepadBean implements Parcelable {
         this.type = type;
     }
 
+    public String getLocationPlaceName() {
+        return locationPlaceName;
+    }
+
+    public void setLocationPlaceName(String locationPlaceName) {
+        this.locationPlaceName = locationPlaceName;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -106,6 +157,9 @@ public class NotepadBean implements Parcelable {
         dest.writeLong(this.notepadTime);
         dest.writeString(this.notepadPhone);
         dest.writeString(this.photos);
+        dest.writeString(this.locationPlaceName);
+        dest.writeDouble(this.latitude);
+        dest.writeDouble(this.longitude);
         dest.writeInt(this.type);
     }
 
@@ -115,6 +169,9 @@ public class NotepadBean implements Parcelable {
         this.notepadTime = source.readLong();
         this.notepadPhone = source.readString();
         this.photos = source.readString();
+        this.locationPlaceName = source.readString();
+        this.latitude = source.readDouble();
+        this.longitude = source.readDouble();
         this.type = source.readInt();
     }
 
@@ -124,6 +181,9 @@ public class NotepadBean implements Parcelable {
         this.notepadTime = in.readLong();
         this.notepadPhone = in.readString();
         this.photos = in.readString();
+        this.locationPlaceName = in.readString();
+        this.latitude = in.readDouble();
+        this.longitude = in.readDouble();
         this.type = in.readInt();
     }
 

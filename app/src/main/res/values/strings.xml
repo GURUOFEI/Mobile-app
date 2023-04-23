@@ -36,6 +36,9 @@
     <string name="type_work">work</string>
     <string name="type_finance">finance</string>
     <string name="type_other">other</string>
+    <string name="location_add_tip">点击添加定位</string>
+    <string name="location_search">正在搜索附近定位</string>
+    <string name="location_choose">请选择一个位置</string>
 
     <string-array name="noteboot_type">
         <item>person</item>

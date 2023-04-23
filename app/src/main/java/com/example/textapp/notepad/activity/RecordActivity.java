@@ -1,6 +1,11 @@
 package com.example.textapp.notepad.activity;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.textapp.R;
 import com.example.textapp.notepad.APP;
 import com.example.textapp.notepad.adapter.PhotoAdapter;
+import com.example.textapp.notepad.bean.LocationBean;
 import com.example.textapp.notepad.bean.NotepadBean;
 import com.example.textapp.notepad.database.SQLiteHelper;
 import com.example.textapp.notepad.utils.DateUtil;
@@ -29,15 +36,25 @@ import com.example.textapp.notepad.utils.SharedPreUtil;
 import com.example.textapp.notepad.utils.ToastUtil;
 import com.example.textapp.notepad.utils.firebse.FirestoreDatabaseUtil;
 import com.example.textapp.notepad.utils.firebse.StorageUtil;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.util.ArrayUtils;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +70,10 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
      * 分类
      */
     private TextView tv_type;
+    /**
+     * 定位按钮
+     */
+    private TextView tv_location;
     /**
      * 图片列表
      */
@@ -77,7 +98,12 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
     private final static int REQUEST_CAMERA = 10001;
     private final static int REQUEST_IMAGES = 10002;
 
-    private SQLiteHelper mSQLiteHelper;
+    /**
+     * 删除定位的按钮
+     */
+    private ImageView iv_delete_location;
+
+//    private SQLiteHelper mSQLiteHelper;
     //    private String id;
     private NotepadBean notepadBean;
 
@@ -93,6 +119,8 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
      */
     private String uuid;
 
+    private LocationBean locationBean = null;
+
     public final static String KEY_NOTEPAD = "key_notepad";
 
     @Override
@@ -107,10 +135,14 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         noteName = (TextView) findViewById(R.id.note_name);//标题的名称
         rv_photo = findViewById(R.id.rv_photo);//图片列表
         tv_type = findViewById(R.id.tv_type);
+        tv_location = findViewById(R.id.tv_location);
+        iv_delete_location = findViewById(R.id.iv_delete_location);
+        tv_location.setOnClickListener(this);
         tv_type.setOnClickListener(this);
         note_back.setOnClickListener(this);
         delete.setOnClickListener(this);
         note_save.setOnClickListener(this);
+        iv_delete_location.setOnClickListener(this);
 
         initPhotoList();
 
@@ -152,7 +184,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         //读取分类数据
         typeArray = getResources().getStringArray(R.array.noteboot_type);
 
-        mSQLiteHelper = new SQLiteHelper(this);
+//        mSQLiteHelper = new SQLiteHelper(this);
         noteName.setText("添加记录");
         Intent intent = getIntent();
         if (intent != null) {
@@ -167,7 +199,6 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                 }
                 //如果有图片，显示图片
                 if (!TextUtils.isEmpty(notepadBean.getPhotos())) {
-                    LogUtil.d(notepadBean.getPhotos());
                     String[] split = notepadBean.getPhotos().split(",");
                     for (String s : split) {
                         photoList.add(0, s);
@@ -175,11 +206,19 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                     }
                     photoAdapter.notifyDataSetChanged();
                 }
+                //如果有定位，显示定位信息
+                showLocationInfo(notepadBean.getLocationPlaceName());
+            }else{
+                //没有定位，不显示定位信息
+                showLocationInfo("");
             }
         }
 
     }
 
+    /**
+     * 选择分类
+     */
     private void chooseType() {
         //添加一个弹窗构造
         AlertDialog.Builder builder = new AlertDialog.Builder(RecordActivity.this).setCancelable(true);
@@ -226,6 +265,16 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                         updateContent.put("notepadTime", System.currentTimeMillis());//更新时间
                         updateContent.put("type", chooseType);//分类
                         updateContent.put("photos", getPhoto());//照片
+                        //定位
+                        if (locationBean != null) {
+                            updateContent.put("locationPlaceName", locationBean.getLocationPlaceName());//定位名称
+                            updateContent.put("latitude", locationBean.getLatitude());//纬度
+                            updateContent.put("longitude", locationBean.getLongitude());//经度
+                        }else{
+                            updateContent.put("locationPlaceName", null);//定位名称
+                            updateContent.put("latitude", 0.0f);//纬度
+                            updateContent.put("longitude", 0.0f);//经度
+                        }
 
                         showLoadingDialog(R.string.common_submit);
                         // Add a new document with a generated ID
@@ -263,6 +312,12 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                         notepadBean.setType(chooseType);
                         //处理图片数据
                         notepadBean.setPhotos(getPhoto());
+                        //处理定位数据
+                        if (locationBean != null) {//有定位
+                            notepadBean.setLocationPlaceName(locationBean.getLocationPlaceName());
+                            notepadBean.setLatitude(locationBean.getLatitude());
+                            notepadBean.setLongitude(locationBean.getLongitude());
+                        }
 
                         showLoadingDialog(R.string.common_submit);
                         // Add a new document with a generated ID
@@ -283,9 +338,111 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                     }
                 }
                 break;
+            case R.id.tv_location:
+                addLocation();
+                break;
+            case R.id.iv_delete_location:
+                locationBean = null;
+                showLocationInfo("");
+                break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 添加定位，调用google places sdk
+     */
+    private void addLocation() {
+        // Create a new PlacesClient instance
+        PlacesClient placesClient = Places.createClient(this);
+        // Use fields to define the data types to return.
+        //这里定义需要获取地点名称和经纬度
+        final List placeFields = Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG);
+
+        // Use the builder to create a FindCurrentPlaceRequest.
+        FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
+
+        // Call findCurrentPlace and handle the response (first check that the user has granted permission).
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
+            showLoadingDialog(R.string.location_search);
+            placeResponse.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    FindCurrentPlaceResponse response = task.getResult();
+                    LocationBean[] locations = new LocationBean[response.getPlaceLikelihoods().size()];
+                    for (int i = 0; i < response.getPlaceLikelihoods().size(); i++) {
+                        Place place = response.getPlaceLikelihoods().get(i).getPlace();
+
+                        //提取定位数据
+                        LocationBean locationBean = new LocationBean();
+                        locationBean.setLocationPlaceName(place.getName());
+                        locationBean.setLatitude(place.getLatLng().latitude);
+                        locationBean.setLongitude(place.getLatLng().longitude);
+                        locations[i] = locationBean;
+
+                    }
+                    showLocationItem(locations);
+                } else {
+                    LogUtil.d("3");
+                    Exception exception = task.getException();
+                    LogUtil.d(task.getException().getMessage());
+                    if (exception instanceof ApiException) {
+                        ApiException apiException = (ApiException) exception;
+                        LogUtil.d("Place not found: " + apiException.getStatusCode());
+                    }
+                }
+                dismissLoadingDialog();
+            });
+        }
+    }
+
+    /**
+     * 根据地址是否空，显示定位信息
+     *
+     * @param address
+     */
+    private void showLocationInfo(String address) {
+        LogUtil.d("address:" + address);
+        Drawable locationIcon = getResources().getDrawable(R.drawable.baseline_location_on_24);
+        if (TextUtils.isEmpty(address)) {
+            //没有定位
+            tv_location.setText(R.string.location_add_tip);
+            locationIcon.setTint(Color.parseColor("#666666"));
+            iv_delete_location.setVisibility(View.GONE);
+        } else {
+            //定位
+            tv_location.setText(address);
+            locationIcon.setTint(Color.parseColor("#03A9F4"));
+            iv_delete_location.setVisibility(View.VISIBLE);
+        }
+        tv_location.setCompoundDrawablesRelativeWithIntrinsicBounds(locationIcon, null, null, null);
+    }
+
+    /**
+     * 定位列表选择框，从定位列表中选择保存的定位
+     *
+     * @param
+     */
+    private void showLocationItem(LocationBean[] locations) {
+        //添加一个弹窗构造
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setCancelable(true);
+        builder.setTitle(R.string.location_choose);
+        String[] placeNames = new String[locations.length];
+        for (int i = 0; i < locations.length; i++) {
+            placeNames[i] = locations[i].getLocationPlaceName();
+        }
+        //菜单选择
+        builder.setItems(placeNames, (dialog, which) -> {
+            //记录选择的定位，用于上传
+            locationBean = locations[which];
+            //显示定位信息
+            showLocationInfo(placeNames[which]);
+        }).create();
+        //创建弹窗
+        AlertDialog dialog = builder.create();
+        //显示弹窗
+        dialog.show();
     }
 
     /**
@@ -366,6 +523,9 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    /**
+     * 上传图片
+     */
     private void uploadPhoto() {
         LogUtil.d("准备上传:" + imagePath);
         Uri file = Uri.fromFile(new File(imagePath));
