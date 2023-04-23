@@ -29,6 +29,14 @@
     <string name="uploading">正在上传图片</string>
     <string name="common_submit">正在提交</string>
 
+    <string name="title">记事本(%s)</string>
+    <string name="type_all">all</string>
+    <string name="type_person">person</string>
+    <string name="type_life">life</string>
+    <string name="type_work">work</string>
+    <string name="type_finance">finance</string>
+    <string name="type_other">other</string>
+
     <string-array name="noteboot_type">
         <item>person</item>
         <item>life</item>

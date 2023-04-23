@@ -1,60 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fefefe"
     tools:context=".notepad.activity.NotepadActivity">
 
-    <TextView
-        android:id="@+id/note_name"
+    <RelativeLayout
+        android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:background="#03A9F4"
-        android:text="@string/notebook" />
+        android:layout_height="wrap_content"
+        android:background="#03A9F4">
+
+        <TextView
+            android:id="@+id/note_name"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:drawableEnd="@drawable/baseline_arrow_drop_down_24"
+            android:gravity="center"
+            android:text="@string/notebook"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
 
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/rl_title"
         android:cacheColorHint="#00000000"
         android:divider="#E4E4E4"
         android:dividerHeight="1dp"
         android:fadingEdge="none"
         android:listSelector="#00000000"
-        android:scrollbars="none"
-        android:layout_below="@+id/note_name">
-    </ListView>
+        android:scrollbars="none"></ListView>
+
     <ImageView
         android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/add"
-        android:layout_marginBottom="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/add" />
+
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
         android:id="@+id/btn_click"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
         android:background="#03A9F4"
-        android:textColor="@android:color/white"
-        android:text="新闻热点"/>
+        android:text="新闻热点"
+        android:textColor="@android:color/white" />
 
 
     <Button
+        android:id="@+id/btn_upd_click"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:id="@+id/btn_upd_click"
-        android:background="#03A9F4"
         android:layout_alignParentRight="true"
-        android:textColor="@android:color/white"
-        android:text="修改密码"/>
+        android:background="#03A9F4"
+        android:text="修改密码"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>
