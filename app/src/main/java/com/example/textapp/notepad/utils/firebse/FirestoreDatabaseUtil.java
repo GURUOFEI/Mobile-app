@@ -6,6 +6,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.inject.Singleton;
 
+/**
+ * 数据库工具，用户笔记的保存到云端
+ */
 public class FirestoreDatabaseUtil {
     private volatile static FirestoreDatabaseUtil mInstance;
     private FirebaseFirestore db = null;
@@ -23,7 +26,8 @@ public class FirestoreDatabaseUtil {
      * @param uuid
      * @return
      */
-    public CollectionReference getUserNotebook(String uuid) {
+    public CollectionReference
+    getUserNotebook(String uuid) {
         return db.collection(DB_NOTEBOOK).document(uuid).collection(USER_NOTEBOOKD);
     }
 

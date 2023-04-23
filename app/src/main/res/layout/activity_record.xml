@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#fefefe"
     android:orientation="vertical"
-    tools:context=".notepad.RecordActivity">
+    tools:context=".notepad.activity.RecordActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -66,6 +66,16 @@
         android:hint="请输入要添加的内容"
         android:paddingLeft="5dp"
         android:textColor="@android:color/black" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#fb7a6a" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
 
     <View
         android:layout_width="match_parent"

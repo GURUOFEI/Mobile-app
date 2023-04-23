@@ -1,4 +1,4 @@
-package com.example.textapp.notepad;
+package com.example.textapp.notepad.activity;
 
 import android.app.Activity;
 import android.content.Intent;

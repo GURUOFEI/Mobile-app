@@ -1,4 +1,4 @@
-package com.example.textapp.notepad;
+package com.example.textapp.notepad.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -20,28 +19,21 @@ import com.example.textapp.R;
 import com.example.textapp.notepad.bean.User;
 import com.example.textapp.notepad.database.SQLiteHelper;
 import com.example.textapp.notepad.utils.AlbumUtil;
-import com.example.textapp.notepad.utils.FirebaseUtil;
-import com.example.textapp.notepad.utils.LogUtil;
 import com.example.textapp.notepad.utils.MD5Utils;
 import com.example.textapp.notepad.utils.ToastUtil;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
+import com.example.textapp.notepad.utils.firebse.RealtimeDatabaseUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.UUID;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     private SQLiteHelper dbHelper;
 
@@ -124,7 +116,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //用户信息，注意密码需要MD5加密
                 User user = new User(UUID.randomUUID().toString(), username_str, MD5Utils.getMD5String(userpassword_str));
-                FirebaseUtil.getInstance()
+                showLoadingDialog(R.string.registering);
+                RealtimeDatabaseUtil.getInstance()
                         .getUserRef(user.getName())
                         .get()
                         .addOnCompleteListener(task -> {
@@ -132,19 +125,20 @@ public class RegisterActivity extends AppCompatActivity {
                                 //判断该用户是否已经注册
                                 if (task.getResult().getValue() == null) {
                                     //没有注册，把数据输入到服务器
-                                    FirebaseUtil.getInstance()
+                                    RealtimeDatabaseUtil.getInstance()
                                             .getUserRef(user.getName())
                                             .setValue(user)
                                             .addOnSuccessListener(unused -> {
-                                                ToastUtil.show("注册成功");
+                                                ToastUtil.show(R.string.register_success);
                                                 //返回登录页面
                                                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                                                 finish();
-                                            }).addOnFailureListener(e -> ToastUtil.show("注册失败请重试"));
+                                            }).addOnFailureListener(e -> ToastUtil.show(R.string.register_failure));
                                 } else {
-                                    ToastUtil.show("该用户已经注册");
+                                    ToastUtil.show(R.string.register_user_exist);
                                 }
                             }
+                            dismissLoadingDialog();
                         });
             }
 //                    db.close();

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-path
+        name="my_images"
+        path="." />
+
+    <!--external-path  相当于 Environment.getExternalStorageDirectory()-->
+    <external-path
+        name="mysport"
+        path="." />
+</paths>

@@ -1,19 +1,14 @@
-package com.example.textapp.notepad;
+package com.example.textapp.notepad.activity;
 
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.textapp.R;
-import com.example.textapp.notepad.bean.User;
 import com.example.textapp.notepad.database.SQLiteHelper;
-import com.example.textapp.notepad.utils.FirebaseUtil;
 import com.example.textapp.notepad.utils.MD5Utils;
 import com.example.textapp.notepad.utils.SharedPreUtil;
 import com.example.textapp.notepad.utils.ToastUtil;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fefefe"
-    tools:context=".notepad.NotepadActivity">
+    tools:context=".notepad.activity.NotepadActivity">
 
     <TextView
         android:id="@+id/note_name"

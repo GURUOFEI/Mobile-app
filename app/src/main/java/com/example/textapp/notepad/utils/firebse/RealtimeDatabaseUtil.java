@@ -5,6 +5,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import javax.inject.Singleton;
 
+/**
+ * 实时数据库工具，用于登录、注册
+ */
 public class RealtimeDatabaseUtil {
     private volatile static RealtimeDatabaseUtil mInstance;
     private FirebaseDatabase database = null;

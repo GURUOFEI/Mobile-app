@@ -16,4 +16,24 @@
         <item name="colorControlNormal">@android:color/darker_gray</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
+
+    <!--自定义Dialog样式-->
+    <style name="MyDialogStyle" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否覆盖窗口显示内容-->
+        <item name="android:windowContentOverlay">@null</item>
+        <!--动画样式-->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!--是否设置阴影-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!--是否设置半透明的效果-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--是否除去标题栏-->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否点击外部空白处消失-->
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
 </resources>

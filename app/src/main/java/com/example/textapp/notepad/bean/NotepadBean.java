@@ -3,13 +3,19 @@ package com.example.textapp.notepad.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class NotepadBean implements Parcelable {
     private String id;
     private String notepadContent;//记录的内容
     private long notepadTime;//保存记录的时间
     private String notepadPhone;
+    /**
+     * 数据路径，多个，用","分隔
+     */
+    private String photos;
 
     /**
      * 分类
@@ -39,10 +45,14 @@ public class NotepadBean implements Parcelable {
         this.notepadContent = map.get("notepadContent").toString();
         this.notepadPhone = map.get("notepadPhone").toString();
         this.notepadTime = Long.parseLong(map.get("notepadTime").toString());
-        if(map.containsKey("type")) {
+        if(map.containsKey("photos")) {
+            this.photos = Objects.requireNonNull(map.get("photos")).toString();
+        }
+        if (map.containsKey("type")) {
             this.type = Integer.parseInt(map.get("type").toString());
         }
     }
+
 
     public String getNotepadContent() {
         return notepadContent;
@@ -68,6 +78,14 @@ public class NotepadBean implements Parcelable {
         this.notepadPhone = notepadPhone;
     }
 
+    public String getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String photos) {
+        this.photos = photos;
+    }
+
     public int getType() {
         return type;
     }
@@ -87,6 +105,7 @@ public class NotepadBean implements Parcelable {
         dest.writeString(this.notepadContent);
         dest.writeLong(this.notepadTime);
         dest.writeString(this.notepadPhone);
+        dest.writeString(this.photos);
         dest.writeInt(this.type);
     }
 
@@ -95,6 +114,7 @@ public class NotepadBean implements Parcelable {
         this.notepadContent = source.readString();
         this.notepadTime = source.readLong();
         this.notepadPhone = source.readString();
+        this.photos = source.readString();
         this.type = source.readInt();
     }
 
@@ -103,6 +123,7 @@ public class NotepadBean implements Parcelable {
         this.notepadContent = in.readString();
         this.notepadTime = in.readLong();
         this.notepadPhone = in.readString();
+        this.photos = in.readString();
         this.type = in.readInt();
     }
 

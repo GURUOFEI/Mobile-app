@@ -1,36 +1,26 @@
-package com.example.textapp.notepad;
+package com.example.textapp.notepad.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.textapp.R;
+import com.example.textapp.notepad.APP;
 import com.example.textapp.notepad.bean.User;
 import com.example.textapp.notepad.database.SQLiteHelper;
-import com.example.textapp.notepad.utils.FirebaseUtil;
 import com.example.textapp.notepad.utils.MD5Utils;
 import com.example.textapp.notepad.utils.SharedPreUtil;
 import com.example.textapp.notepad.utils.TimeCount;
 import com.example.textapp.notepad.utils.ToastUtil;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.textapp.notepad.utils.firebse.RealtimeDatabaseUtil;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private SQLiteHelper dbHelper;
     private Button check_user;
     private EditText username, userpassword;
@@ -81,7 +71,8 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 //提交到Firebase的Realtime Database
-                FirebaseUtil.getInstance()
+                showLoadingDialog(R.string.logining);
+                RealtimeDatabaseUtil.getInstance()
                         .getUserRef(username_str)
                         .get()
                         .addOnCompleteListener(task -> {//回调监听
@@ -111,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 }
                             }
+                            dismissLoadingDialog();
                         });
 
 //                Cursor cursor = db.rawQuery("select * from User where name=?", new String[]{username_str});
