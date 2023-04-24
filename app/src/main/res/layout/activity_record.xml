@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="添加记录"
+            android:text="@string/add_record"
             android:textColor="@android:color/white"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -63,7 +63,7 @@
         android:layout_weight="1"
         android:background="#fefefe"
         android:gravity="top"
-        android:hint="请输入要添加的内容"
+        android:hint="@string/enter_content"
         android:paddingLeft="5dp"
         android:textColor="@android:color/black" />
 

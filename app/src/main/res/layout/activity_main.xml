@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:background="#03A9F4"
-        android:text="新闻热点"
+        android:text="@string/news"
         android:textColor="@android:color/white" />
 
 
@@ -62,7 +62,8 @@
         android:layout_height="45dp"
         android:layout_alignParentRight="true"
         android:background="#03A9F4"
-        android:text="修改密码"
+        android:paddingEnd="10dp"
+        android:text="@string/modify_password"
         android:textColor="@android:color/white" />
 
 </RelativeLayout>

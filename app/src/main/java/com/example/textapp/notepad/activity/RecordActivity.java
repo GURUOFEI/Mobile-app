@@ -185,12 +185,12 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         typeArray = getResources().getStringArray(R.array.noteboot_type);
 
 //        mSQLiteHelper = new SQLiteHelper(this);
-        noteName.setText("添加记录");
+        noteName.setText(R.string.add_record);
         Intent intent = getIntent();
         if (intent != null) {
             notepadBean = intent.getParcelableExtra(KEY_NOTEPAD);
             if (notepadBean != null) {
-                noteName.setText("修改记录");
+                noteName.setText(R.string.edit_record);
                 content.setText(notepadBean.getNotepadContent());
                 note_time.setText(DateUtil.formate(notepadBean.getNotepadTime()));
                 note_time.setVisibility(View.VISIBLE);

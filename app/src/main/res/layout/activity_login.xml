@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/stephile_script"
         android:gravity="center"
-        android:text="Notebook"
+        android:text="@string/notebook"
         android:textColor="@android:color/holo_blue_light"
         android:textSize="60sp" />
 
@@ -35,7 +35,7 @@
         android:background="@drawable/common_input_bg"
         android:drawableLeft="@drawable/baseline_account_circle_24"
         android:drawablePadding="10dp"
-        android:hint="用户名"
+        android:hint="@string/login_username"
         android:padding="10dp"
         android:textColor="#333333"
         android:textColorHint="#666666"
@@ -51,7 +51,7 @@
         android:background="@drawable/common_input_bg"
         android:drawableLeft="@drawable/baseline_password_24"
         android:drawablePadding="10dp"
-        android:hint="密码"
+        android:hint="@string/login_password"
         android:inputType="textPassword"
         android:padding="10dp"
         android:textColor="#333333"
@@ -67,7 +67,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginRight="50dp"
         android:background="@drawable/btn_login"
-        android:text="登录"
+        android:text="@string/login"
         android:textColor="@color/colorWhite"
         android:textSize="16sp" />
 
@@ -82,7 +82,7 @@
         android:background="@drawable/btn_register"
         android:gravity="center"
         android:padding="15dp"
-        android:text="注册"
+        android:text="@string/register"
         android:textColor="#03a9f4"
         android:textSize="16sp" />
 

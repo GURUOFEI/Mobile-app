@@ -1,44 +1,61 @@
 <resources>
     <string name="app_name">TextApp</string>
-    <string name="notebook">记事本</string>
+    <string name="notebook">Notepad</string>
 
-    <string name="login_no_user">该用户不存在!</string>
-    <string name="login_error_password">密码错误，请重新登录</string>
-    <string name="login_enter_username_tip">请输入用户名</string>
-    <string name="login_enter_password_tip">请输入用户密码</string>
-    <string name="login_enter_password_tip2">请再次输入密码</string>
-    <string name="login_password_diff_tip">两次密码不一致，请重新输入</string>
-    <string name="register_checkbox_tip">请勾选同意使用条款</string>
-    <string name="modify_success">修改成功</string>
-    <string name="modify_failure">修改失败，请重试!</string>
-    <string name="modify_password_enter_new_password">请输入新密码</string>
-    <string name="modify_password_enter_confirm_password">请确认密码</string>
-    <string name="logining">正在登录</string>
-    <string name="registering">正在注册</string>
-    <string name="register_success">注册成功</string>
-    <string name="register_failure">注册失败,请重试!</string>
-    <string name="register_user_exist">该用户已经注册</string>
+    <string name="login_no_user">The user does not exist!</string>
+    <string name="login_error_password">The password is incorrect. Please log in again</string>
+    <string name="login_enter_username_tip">Please enter the user name</string>
+    <string name="login_enter_password_tip">Please enter the user password</string>
+    <string name="login_enter_password_tip2">Please enter your password again</string>
+    <string name="login_password_diff_tip">The two passwords do not match. Please re-enter them</string>
+    <string name="register_checkbox_tip">Please check the Agree to Terms of Use box</string>
+    <string name="modify_success">Modified successfully</string>
+    <string name="modify_failure">Modify failed, please try again!</string>
+    <string name="modify_password_enter_new_password">Please enter a new password</string>
+    <string name="modify_password_enter_confirm_password">Please confirm the password.</string>
+    <string name="logining">Logging in</string>
+    <string name="registering">Being registered</string>
+    <string name="register_success">Successful registration</string>
+    <string name="register_failure">Registration failed, please try again!</string>
+    <string name="register_user_exist">The user has registered</string>
 
-    <string name="edit_content_save_tip">保存的记录内容不能为空</string>
-    <string name="edit_content_modify_tip">修改的记录内容不能为空</string>
-    <string name="save_success">保存成功</string>
-    <string name="save_failure">保存失败，请重试!</string>
-    <string name="please_choose_type">请选择分类</string>
-    <string name="type_show">分类: %s</string>
+    <string name="edit_content_save_tip">The saved record cannot be empty</string>
+    <string name="edit_content_modify_tip">The modified record cannot be empty</string>
+    <string name="save_success">Save successfully</string>
+    <string name="save_failure">Save failed, please try again!</string>
+    <string name="please_choose_type">Please select category</string>
+    <string name="type_show">classification: %s</string>
 
-    <string name="uploading">正在上传图片</string>
-    <string name="common_submit">正在提交</string>
+    <string name="uploading">Uploading pictures</string>
+    <string name="common_submit">Be submitting</string>
 
-    <string name="title">记事本(%s)</string>
+    <string name="title">notepad(%s)</string>
     <string name="type_all">all</string>
     <string name="type_person">person</string>
     <string name="type_life">life</string>
     <string name="type_work">work</string>
     <string name="type_finance">finance</string>
     <string name="type_other">other</string>
-    <string name="location_add_tip">点击添加定位</string>
-    <string name="location_search">正在搜索附近定位</string>
-    <string name="location_choose">请选择一个位置</string>
+    <string name="location_add_tip">Click Add Positioning</string>
+    <string name="location_search">Searching for a location in the vicinity</string>
+    <string name="location_choose">Please select a location</string>
+
+
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="login_username">username</string>
+    <string name="login_password">password</string>
+    <string name="login_new_password">new password</string>
+    <string name="login_confirm_password">confirm\npassword</string>
+    <string name="register_agreed">I have agreed to the terms of use</string>
+    <string name="submit">submit</string>
+    <string name="modify_password">Password</string>
+    <string name="modify_password2">Modify Password</string>
+    <string name="news">news</string>
+
+    <string name="add_record">Add Record</string>
+    <string name="edit_record">Edit Record</string>
+    <string name="enter_content">enter content</string>
 
     <string-array name="noteboot_type">
         <item>person</item>
@@ -49,7 +66,7 @@
     </string-array>
 
     <string-array name="add_photo">
-        <item>拍照</item>
-        <item>相册</item>
+        <item>photograph</item>
+        <item>album</item>
     </string-array>
 </resources>

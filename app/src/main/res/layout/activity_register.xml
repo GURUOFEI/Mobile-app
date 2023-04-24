@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="注册页面"
+            android:text="@string/register"
             android:textColor="@color/colorWhite"
             android:textSize="20sp" />
 
@@ -38,7 +38,7 @@
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:text="提交"
+            android:text="@string/submit"
             android:textColor="@color/colorWhite"
             android:textSize="16sp" />
     </RelativeLayout>
@@ -60,7 +60,7 @@
         android:background="@drawable/common_input_bg"
         android:drawableLeft="@drawable/baseline_account_circle_24"
         android:drawablePadding="10dp"
-        android:hint="请输入用户名"
+        android:hint="@string/login_enter_username_tip"
         android:padding="10dp" />
 
     <EditText
@@ -71,7 +71,7 @@
         android:background="@drawable/common_input_bg"
         android:drawableLeft="@drawable/baseline_password_24"
         android:drawablePadding="10dp"
-        android:hint="请输入用户密码"
+        android:hint="@string/login_enter_password_tip"
         android:padding="10dp"
         android:password="true" />
 
@@ -83,7 +83,7 @@
         android:background="@drawable/common_input_bg"
         android:drawableLeft="@drawable/baseline_password_24"
         android:drawablePadding="10dp"
-        android:hint="请再次输入密码"
+        android:hint="@string/login_enter_password_tip2"
         android:padding="10dp"
         android:password="true" />
     <!--<Button
@@ -98,8 +98,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="我已同意使用条款"
-        android:theme="@style/MyCheckBox"
-        android:textColor="@color/colorPrimary" />
+        android:text="@string/register_agreed"
+        android:textColor="@color/colorPrimary"
+        android:theme="@style/MyCheckBox" />
 
 </LinearLayout> 
