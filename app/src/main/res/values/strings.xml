@@ -58,6 +58,8 @@
     <string name="enter_content">enter content</string>
     <string name="record_choose_type">Choose classification</string>
 
+    <string name="permission_tip">The following permissions must be granted :1. Storage permissions. \n2. Location permission</string>
+
     <string-array name="noteboot_type">
         <item>person</item>
         <item>life</item>

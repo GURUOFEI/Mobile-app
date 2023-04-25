@@ -1,12 +1,18 @@
 package com.example.textapp.notepad.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +25,8 @@ import com.example.textapp.notepad.utils.SharedPreUtil;
 import com.example.textapp.notepad.utils.TimeCount;
 import com.example.textapp.notepad.utils.ToastUtil;
 import com.example.textapp.notepad.utils.firebse.RealtimeDatabaseUtil;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class LoginActivity extends BaseActivity {
     private SQLiteHelper dbHelper;
@@ -43,7 +51,7 @@ public class LoginActivity extends BaseActivity {
         userpassword = (EditText) findViewById(R.id.login_password);
 
         //TODO Debug模式，自己把用户名和密码填上，方便测试
-        if(APP.isDebut){
+        if (APP.isDebut) {
             username.setText("user");
             userpassword.setText("123456");
         }
@@ -137,5 +145,64 @@ public class LoginActivity extends BaseActivity {
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
+
+        initPermissions();
+
+    }
+
+
+    /**
+     * 需要申请的权限
+     */
+    private String[] perms = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,//存储权限
+            Manifest.permission.READ_EXTERNAL_STORAGE, //存储权限
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE,//存储权限
+            Manifest.permission.ACCESS_FINE_LOCATION,//定位权限
+            Manifest.permission.CAMERA//相册权限
+    };
+
+    /**
+     * 判断是否需要申请权限
+     */
+    private void initPermissions() {
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // Already have permission, do the thing
+            // ...
+
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_tip), 1001, perms);
+        }
+        requestmanageexternalstoragePermission();
+    }
+
+    /** 权限回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    /**
+     * 权限申请
+     */
+    private void requestmanageexternalstoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // 先判断有没有权限
+            if (!Environment.isExternalStorageManager()) {
+                Toast.makeText(this, "Android VERSION  R OR ABOVE，NO MANAGE_EXTERNAL_STORAGE GRANTED!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + this.getPackageName()));
+                startActivityForResult(intent, 1002);
+            }
+        }
     }
 }
