@@ -13,7 +13,7 @@ public class DateUtil {
      * @return
      */
     public static String formate(long time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(time);
     }
 }

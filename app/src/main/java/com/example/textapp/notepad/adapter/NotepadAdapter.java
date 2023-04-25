@@ -23,7 +23,7 @@ public class NotepadAdapter extends BaseAdapter {
     /**
      * 日期格式化工具
      */
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public NotepadAdapter(Context context, List<NotepadBean> list) {
         layoutInflater = LayoutInflater.from(context);

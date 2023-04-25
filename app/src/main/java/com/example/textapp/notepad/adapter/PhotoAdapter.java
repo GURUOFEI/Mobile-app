@@ -78,9 +78,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                     .placeholder(R.drawable.baseline_insert_photo_24)
                     .into(holder.iv_photo);
             holder.iv_photo.setOnClickListener(v -> {
-//                if (callback != null) {
-//                    callback.onItemClick(position);
-//                }
+                if (callback != null) {
+                    callback.onItemClick(position);
+                }
             });
             holder.iv_delete.setOnClickListener(v -> {
                 if (callback != null) {

@@ -5,7 +5,7 @@
         <shape android:shape="rectangle">
             <stroke
                 android:width="0.5px"
-                android:color="#fb7a6a" />
+                android:color="#999999" />
             <size
                 android:width="10dp"
                 android:height="10dp" />
@@ -17,7 +17,7 @@
         <vector xmlns:android="http://schemas.android.com/apk/res/android"
             android:width="10dp"
             android:height="10dp"
-            android:tint="#fb7a6a"
+            android:tint="#999999"
             android:viewportWidth="24"
             android:viewportHeight="24">
             <path

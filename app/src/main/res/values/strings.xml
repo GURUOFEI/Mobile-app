@@ -56,6 +56,7 @@
     <string name="add_record">Add Record</string>
     <string name="edit_record">Edit Record</string>
     <string name="enter_content">enter content</string>
+    <string name="record_choose_type">Choose classification</string>
 
     <string-array name="noteboot_type">
         <item>person</item>

@@ -161,7 +161,15 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         photoAdapter.setCallback(new PhotoAdapter.Callback() {
             @Override
             public void onItemClick(int position) {
-                chooseImage();
+                LogUtil.d("click:"+position);
+                if(position==photoList.size()-1) {
+                    chooseImage();
+                }else{
+                    //浏览照片
+                    Intent intent =new Intent(RecordActivity.this,PhotoActivity.class);
+                    intent.putExtra("photo_url",photoList.get(position));
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -222,7 +230,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
     private void chooseType() {
         //添加一个弹窗构造
         AlertDialog.Builder builder = new AlertDialog.Builder(RecordActivity.this).setCancelable(true);
-
+        builder.setTitle(R.string.record_choose_type);
         builder.setItems(typeArray, (dialog, which) -> {
             this.chooseType = which;
             tv_type.setText(typeArray[which]);
