@@ -24,6 +24,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_permission_config"
         android:theme="@style/AppTheme">
         <activity android:name=".notepad.activity.EditMineActivity" />
         <activity android:name=".notepad.activity.RecordActivity" />
