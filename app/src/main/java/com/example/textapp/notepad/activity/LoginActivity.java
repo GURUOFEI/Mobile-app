@@ -50,11 +50,11 @@ public class LoginActivity extends BaseActivity {
         username = (EditText) findViewById(R.id.login_username);
         userpassword = (EditText) findViewById(R.id.login_password);
 
-        //TODO Debug模式，自己把用户名和密码填上，方便测试
-        if (APP.isDebut) {
-            username.setText("user");
-            userpassword.setText("123456");
-        }
+//        //TODO Debug模式，自己把用户名和密码填上，方便测试
+//        if (APP.isDebut) {
+//            username.setText("user");
+//            userpassword.setText("123456");
+//        }
 
 //        login_head = (ImageView) findViewById(R.id.login_head);
 
