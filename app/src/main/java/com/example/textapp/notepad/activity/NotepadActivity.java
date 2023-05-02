@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,10 @@ import com.example.textapp.notepad.bean.NotepadBean;
 import com.example.textapp.notepad.database.SQLiteHelper;
 import com.example.textapp.notepad.utils.LogUtil;
 import com.example.textapp.notepad.utils.SharedPreUtil;
+import com.example.textapp.notepad.utils.ToastUtil;
 import com.example.textapp.notepad.utils.firebse.FirestoreDatabaseUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -167,6 +171,7 @@ public class NotepadActivity extends BaseActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                NotepadBean notepadBean = list.get(position);
                 AlertDialog dialog;
                 AlertDialog.Builder builder = new AlertDialog.Builder(NotepadActivity.this)
                         .setMessage("是否删除此记录?")
@@ -180,7 +185,17 @@ public class NotepadActivity extends BaseActivity {
 //                                    adapter.notifyDataSetChanged();
 //                                    Toast.makeText(NotepadActivity.this,"删除成功", Toast.LENGTH_LONG).show();
 //                                }
-
+                                FirestoreDatabaseUtil.getInstance()
+                                        .getUserNotebook(uuid)
+                                        .document(notepadBean.getId())
+                                        .delete()
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                ToastUtil.show(R.string.delete_success);
+                                            } else {
+                                                ToastUtil.show(R.string.delete_failure);
+                                            }
+                                        });
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

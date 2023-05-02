@@ -23,6 +23,8 @@
     <string name="edit_content_modify_tip">The modified record cannot be empty</string>
     <string name="save_success">Save successfully</string>
     <string name="save_failure">Save failed, please try again!</string>
+    <string name="delete_success">Delete successfully</string>
+    <string name="delete_failure">Delete failed, please try again!</string>
     <string name="please_choose_type">Please select category</string>
     <string name="type_show">classification: %s</string>
 
